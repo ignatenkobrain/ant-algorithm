@@ -61,6 +61,8 @@ gint main (gint argc, gchar **argv)
   guint N = 0; // Count cities
   guint i, j;
   guint A, B; // Start and end points
+  guint alpha = 1; // relative influence of the pheromone trail
+  guint beta = 3; // heuristic information
   g_printf ("Input cities count..\n");
   scanf ("%u", &N);
   guint **D = g_new0 (guint *, N + 1);
@@ -77,6 +79,10 @@ gint main (gint argc, gchar **argv)
   scanf ("%u", &A);
   g_printf ("Input end point: ");
   scanf ("%u", &B);
+  g_printf ("Input relative influence of the pheromone trail (default: %u): ", alpha);
+  scanf ("%u", &alpha);
+  g_printf ("Input heutistic information (default: %u): ", beta);
+  scanf ("%u", &beta);
   g_free (D);
   return 0;
 }
