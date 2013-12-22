@@ -6,7 +6,8 @@
 gint main ()
 {
   guint N = 0; // Count cities
-  gint i, j;
+  guint i, j;
+  guint A, B; // Start and end points
   g_printf ("Input cities count..\n");
   scanf ("%u", &N);
   guint **D = g_new0 (guint *, N + 1);
@@ -17,8 +18,12 @@ gint main ()
     for (j = 0; j < N; j++) {
       if (i == j) continue;
       g_printf ("Input D[%u][%u]: ", i, j);
-      scanf("%u", &D[i][j]);
+      scanf ("%u", &D[i][j]);
     }
+  g_printf ("Input start point: ");
+  scanf ("%u", &A);
+  g_printf ("Input end point: ");
+  scanf ("%u", &B);
   g_free (D);
   return 0;
 }
