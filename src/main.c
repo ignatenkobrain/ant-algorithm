@@ -1,7 +1,7 @@
-#include "version.h"
 #include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "config.h"
 
 void print_help ()
 {
@@ -44,7 +44,7 @@ void print_help ()
 
 void print_version ()
 {
-  g_printf ("ant_alg version %s\n", VERSION);
+  g_printf ("ant_alg version %s\n", PACKAGE_VERSION);
 }
 
 
@@ -58,23 +58,40 @@ gint main (gint argc, gchar **argv)
       print_version ();
       return 0;
     }
-  guint N = 4; // Count cities
+  guint n = 0; // Count cities
+  guint m = 0; // Count ants
   guint i, j;
   guint A, B; // Start and end points
   guint alpha = 1; // relative influence of the pheromone trail
   guint beta = 3; // heuristic information
-  g_printf ("Input count of cities (default: %u): ", N);
-  scanf ("%u", &N);
-  guint **D = g_new0 (guint *, N + 1);
-  for (i = 0; i < N; i++)
-    D[i] = g_new (guint, N + 1);
+  gfloat rho = 0.5; // pheromone evaporation rate
+  gdouble tau0 = 0.0; // deposit of pheromone
+  g_printf ("Input cities count..\n");
+  scanf ("%u", &n);
+  guint **D = g_new0 (guint *, n + 1);
+  gdouble **eta = g_new0 (gdouble *, n + 1);
+  gfloat **tau = g_new0 (gfloat *, n + 1);
+  for (i = 0; i < n; i++) {
+    D[i] = g_new0 (guint, n + 1);
+    eta[i] = g_new0 (gdouble, n + 1);
+    tau[i] = g_new0 (gfloat, n + 1);
+  }
   g_printf ("Input cities destination matrix..\n");
-  for (i = 0; i < N; i++)
-    for (j = 0; j < N; j++) {
+  for (i = 0; i < n; i++)
+    for (j = 0; j < n; j++) {
       if (i == j) continue;
       g_printf ("Input D[%u][%u]: ", i, j);
       scanf ("%u", &D[i][j]);
     }
+#ifdef ENABLE_DEBUG 
+  g_printf ("Distance of matrix:\n");
+  for (i = 0; i < n; i++) {
+    g_printf ("\n|");
+    for (j = 0; j < n; j++) 
+      g_printf ("%10u", D[i][j]);
+    g_printf ("|");
+  }
+#endif
   g_printf ("Input start point: ");
   scanf ("%u", &A);
   g_printf ("Input end point: ");
@@ -83,6 +100,41 @@ gint main (gint argc, gchar **argv)
   scanf ("%u", &alpha);
   g_printf ("Input heutistic information (default: %u): ", beta);
   scanf ("%u", &beta);
+  while (rho < 0 || rho > 1) {
+    g_printf ("Input pheromone evaporation rate (min: 0; max: 1; default: %f): ", rho);
+    scanf ("%f", &rho);
+  }
+  g_printf ("Input count of ants: ");
+  // temporary hack
+  m = n;
+  g_printf ("ants: %u\n", m);
+
+  // hack for finding min
+  guint min = 4294967295;
+  for (j = 0; j < n; j++) {
+    if (j == A || D[A][j] == 0) continue;
+    if (D[A][j] < min) min = D[A][j];
+  }
+#ifdef ENABLE_DEBUG
+  g_printf ("min = %u", min);
+#endif
+  tau0 = 1.0 / min;
+  for (i = 0; i < n; i++)
+    for (j = 0; j < n; j++) {
+      if (i == j) continue;
+      eta[i][j] = 1.0 / D[i][j];
+      tau[i][j] = tau0;
+    }
+#ifdef ENABLE_DEBUG
+  g_printf ("Function heuristic value:\n");
+  for (i = 0; i < n; i++) {
+    g_printf ("\n|");
+    for (j = 0; j < n; j++) 
+      g_printf ("%10lf", eta[i][j]);
+    g_printf ("|");
+  }
+#endif
+
   g_free (D);
   return 0;
 }

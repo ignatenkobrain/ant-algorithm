@@ -5,4 +5,4 @@ ant_alg_LDFLAGS = \
 				$(GLIB_LIBS)
 ant_alg_SOURCES = \
 				main.c \
-				version.h
+				config.h
