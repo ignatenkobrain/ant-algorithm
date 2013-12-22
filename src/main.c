@@ -23,7 +23,7 @@ void print_help ()
             "MMAS", "1", "2 to 5", "0.02", "n", "1/(rho*(C^nn))",
             "ACS", "-", "2 to 5", "0.1", "10", "1/(rho*(C^nn))");
   g_printf ("\
-            Here, n is the number of cities in a TSP instance. All variants of AS also require some additional\n\\
+            Here, n is the number of cities in a TSP instance. All variants of AS also require some additional\n\
             parameters. Good values for these parameters are:\n\n\
             EAS: The parameter e is set to e = n.\n\
             AS(rank): The number of ants that deposit pheromones is w = 6.\n\
