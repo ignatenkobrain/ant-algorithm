@@ -6,6 +6,7 @@ AM_INIT_AUTOMAKE([-Wall])
 AC_PROG_CC
 AC_PROG_INSTALL
 PKG_CHECK_MODULES(GLIB, glib-2.0)
+CFLGS="-Wall"
 AC_ARG_ENABLE([debug],
     AS_HELP_STRING([--enable-debug], [Enable debug build]))
 AS_IF([test "x$enable_debug" != "xyes"], [
